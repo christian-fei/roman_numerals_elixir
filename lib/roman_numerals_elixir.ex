@@ -22,12 +22,12 @@ defmodule RomanNumeralsElixir do
 
   defp convert_rec(0, _), do: ""
   defp convert_rec(decimal, roman) when decimal in @decimal_romans_keys do
-    roman <> Map.get @decimal_romans, decimal
+    roman <> Map.get(@decimal_romans, decimal)
   end
-  defp convert_rec(decimal, roman) do
+  defp convert_rec(decimal, _) do
     remaining = @decimal_romans_keys
                 |> Enum.filter(fn(x) -> x < decimal end)
                 |> List.last
-    convert_rec(remaining, roman) <> convert(decimal - remaining)
+    convert(remaining) <> convert(decimal - remaining)
   end
 end
