@@ -33,9 +33,10 @@ defmodule RomanNumeralsElixir do
   end
 
   defp nearest_roman(decimal) do
-    map = Map.keys @decimal_romans
-    roman_decimals = Enum.filter(map, fn(x) -> x < decimal end)
-    List.last roman_decimals
+    @decimal_romans
+    |> Map.keys
+    |> Enum.filter(fn(x) -> x < decimal end)
+    |> List.last
   end
 
   defp matches_numeral(number) do
