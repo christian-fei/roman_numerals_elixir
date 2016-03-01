@@ -14,35 +14,20 @@ defmodule RomanNumeralsElixir do
     900   => "CM",
     1000  => "M",
   }
+  @decimal_romans_keys Map.keys @decimal_romans
 
   def convert(number) when is_number(number) do
     convert_rec(number, "")
   end
 
   defp convert_rec(0, _), do: ""
-  defp convert_rec(remaining, roman) do
-    case matches_numeral remaining do
-      false -> reduce_nearest_roman(remaining, roman)
-      number -> roman <> number
-    end
+  defp convert_rec(decimal, roman) when decimal in @decimal_romans_keys do
+    roman <> Map.get @decimal_romans, decimal
   end
-
-  defp reduce_nearest_roman(remaining, roman) do
-    step = nearest_roman(remaining)
-    convert_rec(step, roman) <> convert(remaining - step)
-  end
-
-  defp nearest_roman(decimal) do
-    @decimal_romans
-    |> Map.keys
-    |> Enum.filter(fn(x) -> x < decimal end)
-    |> List.last
-  end
-
-  defp matches_numeral(number) do
-    case Map.get @decimal_romans, number do
-      nil   -> false
-      roman -> roman
-    end
+  defp convert_rec(decimal, roman) do
+    remaining = @decimal_romans_keys
+                |> Enum.filter(fn(x) -> x < decimal end)
+                |> List.last
+    convert_rec(remaining, roman) <> convert(decimal - remaining)
   end
 end
